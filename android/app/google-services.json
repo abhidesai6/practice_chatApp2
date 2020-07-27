@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "968743851128",
+    "firebase_url": "https://chatmaster-ac7dd.firebaseio.com",
+    "project_id": "chatmaster-ac7dd",
+    "storage_bucket": "chatmaster-ac7dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968743851128:android:ee9e57f885d7c150b5c98d",
+        "android_client_info": {
+          "package_name": "com.example.chat_master"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968743851128-if3o7c25ivr17v7rv0rfv1hi7gg5ps1f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_master",
+            "certificate_hash": "7f71319abafd4f9d99557f0b47a508546649515a"
+          }
+        },
+        {
+          "client_id": "968743851128-ue7771j1fm06es7669r04h5c9fjkg8h2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCe7YICCY3DZerBxtawZ2poETp0BRqnYOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968743851128-ue7771j1fm06es7669r04h5c9fjkg8h2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
