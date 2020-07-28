@@ -2,6 +2,7 @@ import 'package:chat_master/resources/firebase_repository.dart';
 import 'package:chat_master/utils/universal_variables.dart';
 import 'package:chat_master/utils/utilities.dart';
 import 'package:chat_master/widgets/appbar.dart';
+import 'package:chat_master/widgets/custom_tile.dart';
 import 'package:flutter/material.dart';
 
 class ChatListScreen extends StatefulWidget {
@@ -38,7 +39,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.search, color: Colors.white),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, "/search_screen");
+          },
         ),
         IconButton(
           icon: Icon(Icons.more_vert, color: Colors.white),
@@ -54,6 +57,68 @@ class _ChatListScreenState extends State<ChatListScreen> {
       backgroundColor: UniversalVariables.blackColor,
       appBar: customAppBar(context),
       floatingActionButton: NewChatButton(),
+      body: ChatListContainer(currentUserId),
+    );
+  }
+}
+
+class ChatListContainer extends StatefulWidget {
+  final String currentUserId;
+  ChatListContainer(this.currentUserId);
+
+  @override
+  _ChatListContainerState createState() => _ChatListContainerState();
+}
+
+class _ChatListContainerState extends State<ChatListContainer> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ListView.builder(
+        padding: EdgeInsets.all(10),
+        itemCount: 2,
+        itemBuilder: (context, index) {
+          return CustomTile(
+            mini: false,
+            onTap: () {},
+            title: Text("Abhishek Desai",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Arial",
+                  fontSize: 19,
+                )),
+            subtitle: Text(
+              "Hello",
+              style:
+                  TextStyle(color: UniversalVariables.greyColor, fontSize: 14),
+            ),
+            leading: Container(
+              constraints: BoxConstraints(maxHeight: 60, maxWidth: 60),
+              child: Stack(children: <Widget>[
+                CircleAvatar(
+                  maxRadius: 30,
+                  backgroundColor: Colors.grey,
+                  backgroundImage: NetworkImage(""),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    height: 20,
+                    width: 20,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: UniversalVariables.onlineDotColor,
+                        border: Border.all(
+                          color: UniversalVariables.blackColor,
+                          width: 2,
+                        )),
+                  ),
+                )
+              ]),
+            ),
+          );
+        },
+      ),
     );
   }
 }

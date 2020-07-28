@@ -1,3 +1,4 @@
+import 'package:chat_master/page_views/search_screen.dart';
 import 'package:chat_master/resources/firebase_repository.dart';
 import 'package:chat_master/screens/home_screen.dart';
 import 'package:chat_master/screens/login_screen.dart';
@@ -20,6 +21,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: "Chat Master",
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        "/search_screen": (context) => SearchScreen(),
+      },
       home: FutureBuilder(
         future: _repository.getCurrentUser(),
         builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
