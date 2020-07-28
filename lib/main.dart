@@ -14,13 +14,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   FirebaseRepository _repository = new FirebaseRepository();
   @override
   Widget build(BuildContext context) {
-
-    
-
     return MaterialApp(
       title: "Chat Master",
       debugShowCheckedModeBanner: false,

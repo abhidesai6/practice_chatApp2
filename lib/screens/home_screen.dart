@@ -1,3 +1,4 @@
+import 'package:chat_master/page_views/chat_list_screen.dart';
 import 'package:chat_master/utils/universal_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,7 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: UniversalVariables.blackColor,
       body: PageView(
         children: <Widget>[
-          Center(child: Text("Chat List Screen")),
+
+          Container(child: ChatListScreen(),),
           Center(child: Text("Call Logs")),
           Center(child: Text("Contact Screen")),
         ],
@@ -42,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: Container(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(vertical: 15,),
           child: CupertinoTabBar(
             backgroundColor: UniversalVariables.blackColor,
             items: <BottomNavigationBarItem>[
