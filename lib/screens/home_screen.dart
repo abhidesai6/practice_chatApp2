@@ -1,4 +1,5 @@
-import 'package:chat_master/page_views/chat_list_screen.dart';
+
+import 'package:chat_master/screens/page_views/chat_list_screen.dart';
 import 'package:chat_master/utils/universal_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';

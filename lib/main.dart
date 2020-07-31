@@ -1,7 +1,7 @@
-import 'package:chat_master/page_views/search_screen.dart';
 import 'package:chat_master/resources/firebase_repository.dart';
 import 'package:chat_master/screens/home_screen.dart';
 import 'package:chat_master/screens/login_screen.dart';
+import 'package:chat_master/screens/page_views/search_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +25,9 @@ class _MyAppState extends State<MyApp> {
       routes: {
         "/search_screen": (context) => SearchScreen(),
       },
+      theme: ThemeData(
+        brightness: Brightness.dark,
+      ),
       home: FutureBuilder(
         future: _repository.getCurrentUser(),
         builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {

@@ -6,10 +6,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  GoogleSignIn _googleSignIn = new GoogleSignIn();
+  GoogleSignIn _googleSignIn = GoogleSignIn();
   static final Firestore firestore = Firestore.instance;
 
-  //user class used here
+  //user class
   User user = User();
 
   Future<FirebaseUser> getCurrentUser() async {
@@ -24,22 +24,22 @@ class FirebaseMethods {
         await _signInAccount.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
-        idToken: _signInAuthentication.idToken,
-        accessToken: _signInAuthentication.accessToken);
+        accessToken: _signInAuthentication.accessToken,
+        idToken: _signInAuthentication.idToken);
 
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
+    FirebaseUser user = (await _auth.signInWithCredential(credential)) as FirebaseUser;
     return user;
   }
 
   Future<bool> authenticateUser(FirebaseUser user) async {
     QuerySnapshot result = await firestore
-        .collection("user")
+        .collection("users")
         .where("email", isEqualTo: user.email)
         .getDocuments();
 
     final List<DocumentSnapshot> docs = result.documents;
 
+    //if user is registered then length of list > 0 or else less than 0
     return docs.length == 0 ? true : false;
   }
 
@@ -65,15 +65,16 @@ class FirebaseMethods {
     return await _auth.signOut();
   }
 
-  Future<List<User>> fetchAllUsers(FirebaseUser user) async {
+  Future<List<User>> fetchAllUsers(FirebaseUser currentUser) async {
     List<User> userList = List<User>();
+
     QuerySnapshot querySnapshot =
         await firestore.collection("users").getDocuments();
-
     for (var i = 0; i < querySnapshot.documents.length; i++) {
-      if (querySnapshot.documents[i].documentID != user.uid) {
+      if (querySnapshot.documents[i].documentID != currentUser.uid) {
         userList.add(User.fromMap(querySnapshot.documents[i].data));
       }
     }
+    return userList;
   }
 }
