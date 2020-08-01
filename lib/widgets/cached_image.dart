@@ -9,7 +9,6 @@ class CachedImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 250,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
         child: CachedNetworkImage(

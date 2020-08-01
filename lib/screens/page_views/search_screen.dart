@@ -35,13 +35,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   searchAppBar(BuildContext context) {
     return GradientAppBar(
-      gradient:new LinearGradient(
-              colors: [UniversalVariables.gradientColorEnd, UniversalVariables.gradientColorStart],
-              begin: const FractionalOffset(0.0, 0.0),
-              end: const FractionalOffset(0.5, 0.0),
-              stops: [0.0, 0.5],
-              tileMode: TileMode.clamp),
-      
+      gradient: new LinearGradient(
+          colors: [
+            UniversalVariables.gradientColorEnd,
+            UniversalVariables.gradientColorStart
+          ],
+          begin: const FractionalOffset(0.0, 0.0),
+          end: const FractionalOffset(0.5, 0.0),
+          stops: [0.0, 0.5],
+          tileMode: TileMode.clamp),
       leading: IconButton(
         icon: Icon(Icons.arrow_back, color: Colors.white),
         onPressed: () => Navigator.pop(context),
@@ -89,7 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   buildSuggestions(String query) {
     final List<User> suggestionList = query.isEmpty
-        ? []
+        ? List()
         : userList.where((User user) {
             String _getUsername = user.username.toLowerCase();
             String _query = query.toLowerCase();
@@ -115,10 +117,12 @@ class _SearchScreenState extends State<SearchScreen> {
         return CustomTile(
           mini: false,
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(
-              reciever : searchedUser ,
-            )));
-
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                          reciever: searchedUser,
+                        )));
           },
           leading: CircleAvatar(
             backgroundImage: NetworkImage(searchedUser.profilePhoto),
