@@ -1,3 +1,4 @@
+import 'package:chat_master/constants/strings.dart';
 import 'package:chat_master/models/message.dart';
 import 'package:chat_master/models/user.dart';
 import 'package:chat_master/utils/utilities.dart';
@@ -35,8 +36,8 @@ class FirebaseMethods {
 
   Future<bool> authenticateUser(FirebaseUser user) async {
     QuerySnapshot result = await firestore
-        .collection("users")
-        .where("email", isEqualTo: user.email)
+        .collection(USER_COLLECTION)
+        .where(EMAIL_FIELD, isEqualTo: user.email)
         .getDocuments();
 
     final List<DocumentSnapshot> docs = result.documents;
@@ -56,7 +57,7 @@ class FirebaseMethods {
         username: username);
 
     firestore
-        .collection("users")
+        .collection(USER_COLLECTION)
         .document(currentUser.uid)
         .setData(user.toMap(user));
   }
@@ -71,7 +72,7 @@ class FirebaseMethods {
     List<User> userList = List<User>();
 
     QuerySnapshot querySnapshot =
-        await firestore.collection("users").getDocuments();
+        await firestore.collection(USER_COLLECTION).getDocuments();
     for (var i = 0; i < querySnapshot.documents.length; i++) {
       if (querySnapshot.documents[i].documentID != currentUser.uid) {
         userList.add(User.fromMap(querySnapshot.documents[i].data));
@@ -85,16 +86,15 @@ class FirebaseMethods {
     var map = message.toMap();
 
     await firestore
-        .collection("messages")
+        .collection(MESSAGES_COLLECTION)
         .document(message.senderId)
         .collection(message.receiverId)
         .add(map);
 
     return await firestore
-        .collection("messages")
+        .collection(MESSAGES_COLLECTION)
         .document(message.receiverId)
         .collection(message.senderId)
         .add(map);
-
   }
 }
