@@ -1,7 +1,10 @@
+import 'package:chat_master/models/message.dart';
 import 'package:chat_master/models/user.dart';
+import 'package:chat_master/resources/firebase_repository.dart';
 import 'package:chat_master/utils/universal_variables.dart';
 import 'package:chat_master/widgets/appbar.dart';
 import 'package:chat_master/widgets/custom_tile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -16,6 +19,27 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   bool isWriting = false;
   TextEditingController textFieldController = TextEditingController();
+  FirebaseRepository _repository = FirebaseRepository();
+
+  User sender;
+  String _currentUserId;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _repository.getCurrentUser().then((user) {
+      _currentUserId = user.uid;
+
+      setState(() {
+        sender = User(
+          uid: user.uid,
+          name: user.displayName,
+          profilePhoto: user.photoUrl,
+        );
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,25 +71,60 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget messageList() {
-    return ListView.builder(
-        padding: EdgeInsets.all(10),
-        itemCount: 6,
-        itemBuilder: (context, index) {
-          return chatMessageItem();
-        });
+    return StreamBuilder(
+      stream: Firestore.instance
+          .collection("messages")
+          .document(_currentUserId)
+          .collection(widget.reciever.uid)
+          .orderBy("timestamp")
+          .snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.data == null) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return ListView.builder(
+          padding: EdgeInsets.all(10),
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) {
+            return chatMessageItem(snapshot.data.documents[index]);
+          },
+        );
+      },
+    );
   }
 
-  Widget chatMessageItem() {
+  Widget chatMessageItem(DocumentSnapshot snapshot) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15),
       child: Container(
-        alignment: Alignment.centerRight,
-        child: senderLayout(),
+        alignment: snapshot['senderId'] == _currentUserId
+            ? Alignment.centerRight
+            : Alignment.centerLeft,
+        child: snapshot['senderId'] == _currentUserId
+            ? senderLayout(snapshot)
+            : recieverLayout(snapshot),
       ),
     );
   }
 
-  Widget senderLayout() {
+  sendMessage() {
+    var text = textFieldController.text;
+
+    Message _message = Message(
+      receiverId: widget.reciever.uid,
+      senderId: sender.uid,
+      message: text,
+      timestamp: FieldValue.serverTimestamp(),
+      type: 'text',
+    );
+    setState(() {
+      isWriting = false;
+    });
+
+    _repository.addMessageToDb(_message, sender, widget.reciever);
+  }
+
+  Widget senderLayout(DocumentSnapshot snapshot) {
     Radius messageRadius = Radius.circular(12);
 
     return Container(
@@ -82,18 +141,22 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       child: Padding(
         padding: EdgeInsets.all(10),
-        child: Text(
-          "Hello",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        ),
+        child: getMessage(snapshot),
       ),
     );
   }
 
-  Widget recieverLayout() {
+  getMessage(DocumentSnapshot snapshot) {
+    return Text(
+      snapshot['message'],
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+      ),
+    );
+  }
+
+  Widget recieverLayout(DocumentSnapshot snapshot) {
     Radius messageRadius = Radius.circular(12);
 
     return Container(
@@ -111,12 +174,11 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       child: Padding(
           padding: EdgeInsets.all(10),
-          child: Text(
-            "Hello",
-            style: TextStyle(color: Colors.white, fontSize: 16),
-          )),
+          child: getMessage(snapshot),),
     );
   }
+
+
 
   Widget chatControls() {
     setWritingTo(bool value) {
@@ -220,14 +282,16 @@ class _ChatScreenState extends State<ChatScreen> {
             ? Container(
                 margin: EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
-                  gradient: UniversalVariables.fabGradient,
+                  //gradient: UniversalVariables.fabGradient,
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
                   icon: Icon(
                     Icons.send,
-                    size: 17,
+                    color: Colors.white,
+                    size: 27,
                   ),
+                  onPressed: () => sendMessage(),
                 ))
             : Container(),
       ]),

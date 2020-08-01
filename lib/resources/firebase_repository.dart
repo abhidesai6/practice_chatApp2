@@ -1,3 +1,4 @@
+import 'package:chat_master/models/message.dart';
 import 'package:chat_master/models/user.dart';
 import 'package:chat_master/resources/firebase_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,5 +17,9 @@ class FirebaseRepository {
 
   Future<void> signOut() => _firebaseMethods.signOut();
 
-  Future<List<User>> fetchAllUsers(FirebaseUser user) => _firebaseMethods.fetchAllUsers(user);
+  Future<List<User>> fetchAllUsers(FirebaseUser user) =>
+      _firebaseMethods.fetchAllUsers(user);
+
+  Future<void> addMessageToDb(Message message, User sender, User receiver) =>
+      _firebaseMethods.addMessageToDb(message, sender, receiver);
 }
