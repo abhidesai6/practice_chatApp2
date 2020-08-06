@@ -5,6 +5,7 @@ import 'package:chat_master/models/message.dart';
 import 'package:chat_master/models/user.dart';
 import 'package:chat_master/provider/image_upload_provider.dart';
 import 'package:chat_master/resources/firebase_repository.dart';
+import 'package:chat_master/utils/call_utilities.dart';
 import 'package:chat_master/utils/universal_variables.dart';
 import 'package:chat_master/utils/utilities.dart';
 import 'package:chat_master/widgets/appbar.dart';
@@ -116,7 +117,10 @@ class _ChatScreenState extends State<ChatScreen> {
     return CustomAppBar(
         title: Text(widget.reciever.name),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.video_call), onPressed: null),
+          IconButton(
+              icon: Icon(Icons.video_call),
+              onPressed: () => CallUtils.dial(
+                  from: sender, to: widget.reciever, context: context)),
           IconButton(icon: Icon(Icons.phone), onPressed: null),
         ],
         leading: IconButton(

@@ -20,7 +20,15 @@ class CallMethods {
       print(e);
       return false;
     }
+  }
 
-    Future<bool> endCall
+  Future<bool> endCall({Call call}) async {
+    try {
+      await callCollection.document(call.callerId).delete();
+      await callCollection.document(call.receiverId).delete();
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 }
