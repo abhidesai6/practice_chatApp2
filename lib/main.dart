@@ -1,4 +1,5 @@
 import 'package:chat_master/provider/image_upload_provider.dart';
+import 'package:chat_master/provider/user_provider.dart';
 import 'package:chat_master/resources/firebase_repository.dart';
 import 'package:chat_master/screens/home_screen.dart';
 import 'package:chat_master/screens/login_screen.dart';
@@ -20,8 +21,11 @@ class _MyAppState extends State<MyApp> {
   FirebaseRepository _repository = new FirebaseRepository();
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ImageUploadProvider>(
-      create: (context) => ImageUploadProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ImageUploadProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
       child: MaterialApp(
         title: "Chat Master",
         debugShowCheckedModeBanner: false,

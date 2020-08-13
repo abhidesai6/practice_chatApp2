@@ -39,4 +39,6 @@ class FirebaseRepository {
       imageUploadProvider,
     );
   }
+
+  Future<User> getUserDetails() => _firebaseMethods.getUserDetails();
 }
